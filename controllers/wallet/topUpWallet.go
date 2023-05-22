@@ -1,7 +1,6 @@
 package controllers
 
 import (
-	"fmt"
 	"log"
 	"net/http"
 	"time"
@@ -38,8 +37,6 @@ func TopUpWallet(c echo.Context) error {
 	}
 
 	expireTime := time.Now().Add(1 * time.Minute)
-
-	fmt.Println("amountReq =", req.Amount)
 	data := entity.WalletTransactions{
 		WalletID:   wallet.ID,
 		CustomerID: uint(logged),
