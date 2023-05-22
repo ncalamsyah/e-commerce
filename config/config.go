@@ -33,6 +33,7 @@ func InitMigrate() {
 	DB.AutoMigrate(&product.Product{})
 	DB.AutoMigrate(&order.Transactions{})
 	DB.AutoMigrate(&wallet.Wallet{})
+	DB.AutoMigrate(&wallet.WalletTransactions{})
 	log.Print("migrate successfully")
 }
 

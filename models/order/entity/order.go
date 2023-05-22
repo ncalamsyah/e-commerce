@@ -20,7 +20,7 @@ type Transactions struct {
 	ProductID  uint      `json:"product_id"`
 	Address    string    `json:"address"`
 	Quantity   int       `json:"quantity"`
-	TotalPrice float64   `json:"total_price"`
+	TotalPrice int   `json:"total_price"`
 	Status     string    `json:"status"`
 	ExpiredAt  time.Time `json:"expired_at"`
 

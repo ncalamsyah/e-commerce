@@ -6,6 +6,7 @@ import (
 	controllersOrder "github.com/ncalamsyah/e-commerce/controllers/order"
 	controllersProduct "github.com/ncalamsyah/e-commerce/controllers/product"
 	controllersUser "github.com/ncalamsyah/e-commerce/controllers/user"
+	controllersWallet "github.com/ncalamsyah/e-commerce/controllers/wallet"
 	_ "github.com/ncalamsyah/e-commerce/docs"
 	"github.com/ncalamsyah/e-commerce/middlewares"
 	echoSwagger "github.com/swaggo/echo-swagger"
@@ -41,5 +42,12 @@ func New() *echo.Echo {
 	o.PUT("/:id", controllersOrder.UpdateOrder)
 	o.GET("/order-list", controllersOrder.GetOrderByUserIdOrProductIds)
 
+	// user
+	u := e.Group("/user")
+	u.Use(middleware.JWT([]byte(middlewares.SECRET)))
+	u.GET("/wallet", controllersWallet.GetWalletByUserId)
+	u.POST("/wallet", controllersWallet.CreateWallet)
+	u.POST("/wallet-topup", controllersWallet.TopUpWallet)
+	u.PUT("/wallet-confirm/:id", controllersWallet.ConfirmWalletTrans)
 	return e
 }

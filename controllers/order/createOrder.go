@@ -15,6 +15,7 @@ import (
 	repoOrder "github.com/ncalamsyah/e-commerce/repository/order"
 	repoProduct "github.com/ncalamsyah/e-commerce/repository/product"
 	repoUser "github.com/ncalamsyah/e-commerce/repository/user"
+	repoWallet "github.com/ncalamsyah/e-commerce/repository/wallet"
 )
 
 // CreateOrder
@@ -68,9 +69,18 @@ func CreateOrder(c echo.Context) error {
 		ProductID:  req.ProductID,
 		Address:    req.Address,
 		Quantity:   req.Quantity,
-		TotalPrice: float64(totalPrice),
+		TotalPrice: totalPrice,
 		Status:     entity.WaitingStatus,
 		ExpiredAt:  expireTime,
+	}
+
+	wallet, err := repoWallet.GetWalletByUserId(logged)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, response.BuildErrorResponse("error", http.StatusInternalServerError, err))
+	}
+
+	if data.TotalPrice > wallet.Balance {
+		return c.JSON(http.StatusBadRequest, response.BuildErrorResponse("error", http.StatusBadRequest, errors.New("insufficient balance")))
 	}
 
 	res, err := repoOrder.CreateOrder(&data)

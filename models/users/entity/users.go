@@ -10,7 +10,6 @@ type Users struct {
 	Email    string `json:"email" gorm:"unique" form:"email"`
 	Password string `json:"password" form:"password"`
 	IsSeller bool   `json:"is_seller"`
-	WalletID uint   `json:"wallet_id"`
 	Token    string
 
 	response.BaseModelSoftDelete
