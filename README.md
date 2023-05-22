@@ -15,6 +15,14 @@ docker-compose up -d
 go run main.go
 ```
 
+- to access API documentation
+```
+http://localhost:9200/docs/index.html#/
+```
+
+## ERD
+![ERD](ERD.png)
+
 ## Framework
 
 - Framework : Go Echo
