@@ -1,0 +1,43 @@
+version: "3.9"
+
+services:
+  # server:
+  #   container_name: golang-server
+  #   restart: on-failure
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   env_file:
+  #     - .env
+  #   ports:
+  #     - 9201:9201
+  #   volumes:
+  #     - service-golang:/golang
+  #   network_mode: host
+
+  postgres:
+    container_name: postgres
+    image: postgres:alpine
+    restart: always
+    volumes:
+      - postgres-data:/var/lib/postgresql
+    expose:
+      - 5432
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: alam
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: ecommerce
+    networks:
+      - golang-network
+
+volumes:
+  postgres-data:
+    name: postgres-data
+  # service-golang:
+  #   name: service-golang
+
+networks:
+  golang-network:
+    driver: bridge

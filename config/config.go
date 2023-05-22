@@ -2,7 +2,9 @@ package config
 
 import (
 	"fmt"
+	"os"
 
+	"github.com/joho/godotenv"
 	"github.com/labstack/gommon/log"
 	order "github.com/ncalamsyah/e-commerce/models/order/entity"
 	product "github.com/ncalamsyah/e-commerce/models/product/entity"
@@ -17,10 +19,11 @@ var (
 )
 
 func InitDB() {
-	// config := os.Getenv("DB_DSN")
-	dsn := PostgresURI("alam", "root", fmt.Sprintf(`%s:%s`, "localhost", "5432"), "ecommerce")
+	godotenv.Load(".env")
+	config := os.Getenv("DB_DSN")
+	// dsn := PostgresURI("alam", "root", fmt.Sprintf(`%s:%s`, "localhost", "5432"), "ecommerce")
 	var err error
-	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	DB, err = gorm.Open(postgres.Open(config), &gorm.Config{})
 	if err != nil {
 		panic(err)
 	}
