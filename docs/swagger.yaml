@@ -1,0 +1,774 @@
+definitions:
+  dto.CreateUserResponse:
+    properties:
+      id:
+        type: integer
+      message:
+        type: string
+    type: object
+  entity.Product:
+    properties:
+      created_at:
+        type: string
+      deleted_at:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      name:
+        type: string
+      price:
+        type: string
+      quantity:
+        type: integer
+      seller_id:
+        type: integer
+      updated_at:
+        type: string
+    type: object
+  entity.Transactions:
+    properties:
+      address:
+        type: string
+      created_at:
+        type: string
+      customer_id:
+        type: integer
+      deleted_at:
+        $ref: '#/definitions/gorm.DeletedAt'
+      id:
+        type: integer
+      product_id:
+        type: integer
+      quantity:
+        type: integer
+      status:
+        type: string
+      total_price:
+        type: number
+      updated_at:
+        type: string
+    type: object
+  entity.Users:
+    properties:
+      created_at:
+        type: string
+      deleted_at:
+        $ref: '#/definitions/gorm.DeletedAt'
+      email:
+        type: string
+      id:
+        type: integer
+      is_seller:
+        type: boolean
+      name:
+        type: string
+      password:
+        type: string
+      token:
+        type: string
+      updated_at:
+        type: string
+      wallet_id:
+        type: integer
+    type: object
+  gorm.DeletedAt:
+    properties:
+      time:
+        type: string
+      valid:
+        description: Valid is true if Time is not NULL
+        type: boolean
+    type: object
+  response.ErrorResponse:
+    properties:
+      code:
+        type: integer
+      errors: {}
+      message:
+        type: string
+    type: object
+  response.SuccessResponse:
+    properties:
+      code:
+        type: integer
+      data: {}
+      message:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: This is a docs for e-commerce API.
+  title: E-Commerce API
+paths:
+  /order:
+    post:
+      operationId: CreateOrder
+      parameters:
+      - description: product id
+        in: formData
+        name: product_id
+        required: true
+        type: integer
+      - description: address
+        in: formData
+        name: address
+        required: true
+        type: string
+      - description: quantity
+        in: formData
+        name: quantity
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Transactions'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.ErrorResponse'
+            - properties:
+                errors:
+                  items:
+                    type: string
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.ErrorResponse'
+            - properties:
+                errors:
+                  items:
+                    type: string
+                  type: array
+              type: object
+      security:
+      - JWTAuth: []
+      summary: Create Order
+      tags:
+      - Order
+  /order/{id}:
+    get:
+      operationId: GetOrderDetail
+      parameters:
+      - description: order id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Transactions'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.ErrorResponse'
+            - properties:
+                errors:
+                  items:
+                    type: string
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.ErrorResponse'
+            - properties:
+                errors:
+                  items:
+                    type: string
+                  type: array
+              type: object
+      security:
+      - JWTAuth: []
+      summary: Get Order Detail
+      tags:
+      - Order
+    put:
+      operationId: UpdateOrder
+      parameters:
+      - description: order ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Transactions'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.ErrorResponse'
+            - properties:
+                errors:
+                  items:
+                    type: string
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.ErrorResponse'
+            - properties:
+                errors:
+                  items:
+                    type: string
+                  type: array
+              type: object
+      summary: Update Order Status
+      tags:
+      - Order
+  /product:
+    post:
+      operationId: CreateProduct
+      parameters:
+      - description: product name
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: quantity
+        in: formData
+        name: quantity
+        required: true
+        type: integer
+      - description: price
+        in: formData
+        name: price
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Product'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.ErrorResponse'
+            - properties:
+                errors:
+                  items:
+                    type: string
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.ErrorResponse'
+            - properties:
+                errors:
+                  items:
+                    type: string
+                  type: array
+              type: object
+      security:
+      - JWTAuth: []
+      summary: Create Products
+      tags:
+      - Product
+  /product/{id}:
+    delete:
+      operationId: DeleteProduct
+      parameters:
+      - description: product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Product'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.ErrorResponse'
+            - properties:
+                errors:
+                  items:
+                    type: string
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.ErrorResponse'
+            - properties:
+                errors:
+                  items:
+                    type: string
+                  type: array
+              type: object
+      security:
+      - JWTAuth: []
+      summary: Delete Product
+      tags:
+      - Product
+    put:
+      operationId: UpdateProduct
+      parameters:
+      - description: product id
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: product name
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: quantity
+        in: formData
+        name: quantity
+        required: true
+        type: integer
+      - description: price
+        in: formData
+        name: price
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Product'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.ErrorResponse'
+            - properties:
+                errors:
+                  items:
+                    type: string
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.ErrorResponse'
+            - properties:
+                errors:
+                  items:
+                    type: string
+                  type: array
+              type: object
+      security:
+      - JWTAuth: []
+      summary: Update Products
+      tags:
+      - Product
+  /public/product/{id}:
+    get:
+      operationId: GetDetailProduct
+      parameters:
+      - description: product ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Product'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.ErrorResponse'
+            - properties:
+                errors:
+                  items:
+                    type: string
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.ErrorResponse'
+            - properties:
+                errors:
+                  items:
+                    type: string
+                  type: array
+              type: object
+      summary: Get Detail Product
+      tags:
+      - Product
+  /public/products:
+    get:
+      operationId: GetAllProducts
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/entity.Product'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.ErrorResponse'
+            - properties:
+                errors:
+                  items:
+                    type: string
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.ErrorResponse'
+            - properties:
+                errors:
+                  items:
+                    type: string
+                  type: array
+              type: object
+      summary: Get All Products
+      tags:
+      - Product
+  /public/products/{user_id}:
+    get:
+      operationId: GetProductByUserId
+      parameters:
+      - description: user ID
+        in: path
+        name: user_id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  items:
+                    $ref: '#/definitions/entity.Product'
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.ErrorResponse'
+            - properties:
+                errors:
+                  items:
+                    type: string
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.ErrorResponse'
+            - properties:
+                errors:
+                  items:
+                    type: string
+                  type: array
+              type: object
+      summary: Get Product By User ID
+      tags:
+      - Product
+  /public/users/{id}:
+    get:
+      operationId: GetUserByID
+      parameters:
+      - description: id
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/entity.Users'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.ErrorResponse'
+            - properties:
+                errors:
+                  items:
+                    type: string
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.ErrorResponse'
+            - properties:
+                errors:
+                  items:
+                    type: string
+                  type: array
+              type: object
+      summary: GetUserByID
+      tags:
+      - User
+  /public/users/login:
+    post:
+      operationId: Login
+      parameters:
+      - description: email
+        in: formData
+        name: email
+        required: true
+        type: string
+      - description: password
+        in: formData
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  items:
+                    type: string
+                  type: array
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.ErrorResponse'
+            - properties:
+                errors:
+                  items:
+                    type: string
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.ErrorResponse'
+            - properties:
+                errors:
+                  items:
+                    type: string
+                  type: array
+              type: object
+      summary: Login User
+      tags:
+      - User
+  /public/users/register:
+    post:
+      operationId: CreateUser
+      parameters:
+      - description: name
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: email
+        in: formData
+        name: email
+        required: true
+        type: string
+      - description: password
+        in: formData
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.CreateUserResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.ErrorResponse'
+            - properties:
+                errors:
+                  items:
+                    type: string
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.ErrorResponse'
+            - properties:
+                errors:
+                  items:
+                    type: string
+                  type: array
+              type: object
+      summary: Register New User
+      tags:
+      - User
+  /public/users/register-seller:
+    post:
+      operationId: CreateUserSeller
+      parameters:
+      - description: name
+        in: formData
+        name: name
+        required: true
+        type: string
+      - description: email
+        in: formData
+        name: email
+        required: true
+        type: string
+      - description: password
+        in: formData
+        name: password
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.SuccessResponse'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.CreateUserResponse'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.ErrorResponse'
+            - properties:
+                errors:
+                  items:
+                    type: string
+                  type: array
+              type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            allOf:
+            - $ref: '#/definitions/response.ErrorResponse'
+            - properties:
+                errors:
+                  items:
+                    type: string
+                  type: array
+              type: object
+      summary: Register New User Seller
+      tags:
+      - User
+securityDefinitions:
+  JWTAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
